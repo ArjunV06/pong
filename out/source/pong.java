@@ -378,6 +378,8 @@ class ScoreBoard {
   
   int leftScore;
   int rightScore;
+  
+  
   int size;
 
 
