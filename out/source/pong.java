@@ -29,7 +29,8 @@ public void setup(){
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.3f;
   float ease=(height/1080)*0.8f;
-  font = createFont("bit5x3.ttf",32);
+  int fontSize=width*10;
+  font = createFont("bit5x3.ttf",108);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
 }
@@ -203,7 +204,7 @@ class Paddle
         stroke(255);
         rect(x,y,sizex,sizey);
         strokeWeight(4);
-        line(x,y-sizey/2,x,y+sizey/2);
+        line(x,y-sizey/2+2,x,y+sizey/2-2);
         fill(255);
         noStroke();
         rectMode(CORNER);
