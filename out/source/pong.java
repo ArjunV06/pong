@@ -376,7 +376,9 @@ class Paddle
 }
 class ScoreBoard {
   
-  int leftScore, rightScore,size;
+  int leftScore;
+  int rightScore;
+  int size;
 
 
   ScoreBoard() {
