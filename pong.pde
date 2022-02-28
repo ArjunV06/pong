@@ -13,12 +13,7 @@ void setup(){
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.3;
   float ease=(height/1080)*0.8;
-<<<<<<< HEAD
   font = createFont("bit5x3.ttf",128);
-=======
-  int fontSize=width*10;
-  font = createFont("bit5x3.ttf",108);
->>>>>>> 60660512018cf2dffa0dd49e8de56a86b47d1b42
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
 }
