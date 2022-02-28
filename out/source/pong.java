@@ -29,7 +29,7 @@ public void setup(){
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.3f;
   float ease=(height/1080)*0.8f;
-  font = createFont("bit5x3.ttf",32);
+  font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
 }
@@ -143,6 +143,26 @@ public void keyReleased()
     case 98:
       directionRight=4;
   }
+}
+class Ball
+{
+    int xPos;
+    int yPos;
+    float xVel;
+    float yVel;
+    float xAcc;
+    float yAcc;
+
+    Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_)
+    {
+        xPos=xPosl;
+        yPos=yPos_;
+        xVel=xVel_;
+        yVel=yVel_;
+        xAcc=xAcc_;
+        yAcc=yAcc_;
+
+    }
 }
 class Paddle
 {
