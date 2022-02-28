@@ -57,7 +57,7 @@ class Paddle
         stroke(255);
         rect(x,y,sizex,sizey);
         strokeWeight(4);
-        line(x,y-sizey/2,x,y+sizey/2);
+        line(x,y-sizey/2+2,x,y+sizey/2-2);
         fill(255);
         noStroke();
         rectMode(CORNER);
