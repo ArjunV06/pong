@@ -4,7 +4,7 @@ class Paddle
     int heigh;
     float maxSpeed;
     float speed;
-    int xcor;
+    int xPos;
     int ycor;
     float ease;
     float accel;
@@ -18,7 +18,7 @@ class Paddle
         widt=wid;
         heigh=hei;
         maxSpeed=spe;
-        xcor=x;
+        xPos=x;
         ycor=y;
         ease=0;
         accel=0;
@@ -34,7 +34,7 @@ class Paddle
         maxSpeed=spe;
         ease=eas;
         accel=acc;
-        xcor=x;
+        xPos=x;
         ycor=y;
         speed=0;
         wallcollision=false;
@@ -45,7 +45,7 @@ class Paddle
     {
         pushStyle();
         fill(255);
-        rect(xcor,ycor,widt,heigh);
+        rect(xPos,ycor,widt,heigh);
         popStyle();
     }
 
