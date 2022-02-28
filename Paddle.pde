@@ -5,7 +5,7 @@ class Paddle
     float maxSpeed;
     float speed;
     int xPos;
-    int ycor;
+    int yPos;
     float ease;
     float accel;
     boolean wallcollision;
@@ -19,7 +19,7 @@ class Paddle
         heigh=hei;
         maxSpeed=spe;
         xPos=x;
-        ycor=y;
+        yPos=y;
         ease=0;
         accel=0;
         speed=0;
@@ -35,7 +35,7 @@ class Paddle
         ease=eas;
         accel=acc;
         xPos=x;
-        ycor=y;
+        yPos=y;
         speed=0;
         wallcollision=false;
         bounceOff=bounce;
@@ -45,7 +45,7 @@ class Paddle
     {
         pushStyle();
         fill(255);
-        rect(xPos,ycor,widt,heigh);
+        rect(xPos,yPos,widt,heigh);
         popStyle();
     }
 
@@ -69,7 +69,7 @@ class Paddle
 
     void confine()
     {
-        ycor=constrain(ycor,heigh/2+30,height-heigh/2-30);
+        yPos=constrain(yPos,heigh/2+30,height-heigh/2-30);
     }
 
     void up()
@@ -84,9 +84,9 @@ class Paddle
             
         }
         //println(heigh/2-height);
-        if(ycor>=heigh/2+30 && ycor<=height-(heigh/2+30))
+        if(yPos>=heigh/2+30 && yPos<=height-(heigh/2+30))
         {
-            ycor-=int(speed);
+            yPos-=int(speed);
             wallcollision=false;
         }
         else
@@ -97,14 +97,14 @@ class Paddle
                 wallcollision=true;
             }
             
-            ycor-=int(speed);
-            /*if(ycor>height/2)
+            yPos-=int(speed);
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }
@@ -122,9 +122,9 @@ class Paddle
         {
             speed=0;
         }
-        if(ycor>=heigh/2+30 && ycor<=height-heigh/2-30)
+        if(yPos>=heigh/2+30 && yPos<=height-heigh/2-30)
         {
-            ycor-=int(speed);
+            yPos-=int(speed);
             wallcollision=false;
         }
         else
@@ -134,15 +134,15 @@ class Paddle
                 speed=speed*(-bounceOff);
                 wallcollision=true;
             }
-            ycor-=int(speed);
+            yPos-=int(speed);
             /*speed=0;
-            if(ycor>height/2)
+            if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
         }
     }
@@ -163,28 +163,28 @@ class Paddle
             
        // }
         //println(heigh/2-height);
-        if(ycor<=height-heigh/2-30 && ycor>=heigh/2+30)
+        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
         {
-            ycor-=int(speed);
+            yPos-=int(speed);
             wallcollision=false;
             
         }
         else
         {   
-            ycor-=int(speed);
+            yPos-=int(speed);
             if(!wallcollision)
             {
                 speed=speed*(-bounceOff);
                 wallcollision=true;
             }
             
-            /*if(ycor>height/2)
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }
@@ -202,9 +202,9 @@ class Paddle
         {
             speed=0;
         }
-        if(ycor<=height-heigh/2-30 && ycor>=heigh/2+30)
+        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
         {
-            ycor-=int(speed);
+            yPos-=int(speed);
             wallcollision=false;
         }
         else
@@ -215,14 +215,14 @@ class Paddle
                 wallcollision=true;
             }
             
-            ycor-=int(speed);
-            /*if(ycor>height/2)
+            yPos-=int(speed);
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }

@@ -19,9 +19,11 @@ public class pong extends PApplet {
 ScoreBoard sb;
 Paddle left;
 Paddle right;
+Ball ball;
 int directionLeft=0;
 int directionRight=0;
 PFont font;
+boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(1)));
 public void setup(){
   
   //fullScreen(3);
@@ -32,6 +34,7 @@ public void setup(){
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
+  ball = new Ball(width/2,height/2,3,0,3,0,30);
 }
 
 public void draw(){
@@ -40,6 +43,12 @@ public void draw(){
   right.confine();
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
+  ball.display();
+  if(ball.collisionDetected(right) || ball.collisionDetected(left))
+  {
+    rightBool=!rightBool;
+  }
+  ball.move(rightBool);
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
   rectMode(CENTER);
@@ -148,19 +157,66 @@ class Ball
 {
     int xPos;
     int yPos;
+    int radius;
     float xVel;
     float yVel;
     float xAcc;
     float yAcc;
 
-    Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_)
+    Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
     {
+
         xPos=xPosl;
         yPos=yPos_;
         xVel=xVel_;
         yVel=yVel_;
         xAcc=xAcc_;
         yAcc=yAcc_;
+        radius=radius_;
+
+    }
+
+    public void display()
+    {
+        ellipse(xPos,yPos,radius*2,radius*2);
+    }
+    public void move(boolean right)
+    {
+        if(right)
+        {
+            xPos+=xVel;
+        }
+        else
+        {
+            xPos-=xVel;
+        }
+    }
+    
+    public boolean collisionDetected(Paddle paddle)
+    {
+        int xDis = abs(this.xPos-paddle.xPos);
+        int yDis = abs(this.yPos-paddle.yPos);
+        if(xDis > (paddle.widt/2 + this.radius))
+        {
+            return false;
+        }
+        if(yDis > (paddle.heigh/2 + this.radius))
+        {
+            return false;
+        }
+        if(xDis <= (paddle.widt/2))
+        {
+            return true;
+        }
+        if(yDis <= (paddle.heigh/2))
+        {
+            return true;
+        }
+
+        int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
+
+        return (cornerCase <= (ball.radius^2)); //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
+
 
     }
 }
@@ -170,8 +226,8 @@ class Paddle
     int heigh;
     float maxSpeed;
     float speed;
-    int xcor;
-    int ycor;
+    int xPos;
+    int yPos;
     float ease;
     float accel;
     boolean wallcollision;
@@ -184,8 +240,8 @@ class Paddle
         widt=wid;
         heigh=hei;
         maxSpeed=spe;
-        xcor=x;
-        ycor=y;
+        xPos=x;
+        yPos=y;
         ease=0;
         accel=0;
         speed=0;
@@ -200,8 +256,8 @@ class Paddle
         maxSpeed=spe;
         ease=eas;
         accel=acc;
-        xcor=x;
-        ycor=y;
+        xPos=x;
+        yPos=y;
         speed=0;
         wallcollision=false;
         bounceOff=bounce;
@@ -211,7 +267,7 @@ class Paddle
     {
         pushStyle();
         fill(255);
-        rect(xcor,ycor,widt,heigh);
+        rect(xPos,yPos,widt,heigh);
         popStyle();
     }
 
@@ -235,7 +291,7 @@ class Paddle
 
     public void confine()
     {
-        ycor=constrain(ycor,heigh/2+30,height-heigh/2-30);
+        yPos=constrain(yPos,heigh/2+30,height-heigh/2-30);
     }
 
     public void up()
@@ -250,9 +306,9 @@ class Paddle
             
         }
         //println(heigh/2-height);
-        if(ycor>=heigh/2+30 && ycor<=height-(heigh/2+30))
+        if(yPos>=heigh/2+30 && yPos<=height-(heigh/2+30))
         {
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             wallcollision=false;
         }
         else
@@ -263,14 +319,14 @@ class Paddle
                 wallcollision=true;
             }
             
-            ycor-=PApplet.parseInt(speed);
-            /*if(ycor>height/2)
+            yPos-=PApplet.parseInt(speed);
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }
@@ -288,9 +344,9 @@ class Paddle
         {
             speed=0;
         }
-        if(ycor>=heigh/2+30 && ycor<=height-heigh/2-30)
+        if(yPos>=heigh/2+30 && yPos<=height-heigh/2-30)
         {
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             wallcollision=false;
         }
         else
@@ -300,15 +356,15 @@ class Paddle
                 speed=speed*(-bounceOff);
                 wallcollision=true;
             }
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             /*speed=0;
-            if(ycor>height/2)
+            if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
         }
     }
@@ -329,28 +385,28 @@ class Paddle
             
        // }
         //println(heigh/2-height);
-        if(ycor<=height-heigh/2-30 && ycor>=heigh/2+30)
+        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
         {
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             wallcollision=false;
             
         }
         else
         {   
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             if(!wallcollision)
             {
                 speed=speed*(-bounceOff);
                 wallcollision=true;
             }
             
-            /*if(ycor>height/2)
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }
@@ -368,9 +424,9 @@ class Paddle
         {
             speed=0;
         }
-        if(ycor<=height-heigh/2-30 && ycor>=heigh/2+30)
+        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
         {
-            ycor-=PApplet.parseInt(speed);
+            yPos-=PApplet.parseInt(speed);
             wallcollision=false;
         }
         else
@@ -381,14 +437,14 @@ class Paddle
                 wallcollision=true;
             }
             
-            ycor-=PApplet.parseInt(speed);
-            /*if(ycor>height/2)
+            yPos-=PApplet.parseInt(speed);
+            /*if(yPos>height/2)
             {
-                ycor=height-heigh/2-31;
+                yPos=height-heigh/2-31;
             }
             else
             {
-                ycor=heigh/2+31;
+                yPos=heigh/2+31;
             }*/
 
         }

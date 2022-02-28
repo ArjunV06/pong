@@ -3,9 +3,11 @@
 ScoreBoard sb;
 Paddle left;
 Paddle right;
+Ball ball;
 int directionLeft=0;
 int directionRight=0;
 PFont font;
+boolean rightBool=boolean(int(random(1)));
 void setup(){
   size(1920,1080,P2D);
   //fullScreen(3);
@@ -16,6 +18,7 @@ void setup(){
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
+  ball = new Ball(width/2,height/2,3,0,3,0,30);
 }
 
 void draw(){
@@ -24,6 +27,12 @@ void draw(){
   right.confine();
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
+  ball.display();
+  if(ball.collisionDetected(right) || ball.collisionDetected(left))
+  {
+    rightBool=!rightBool;
+  }
+  ball.move(rightBool);
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
   rectMode(CENTER);
