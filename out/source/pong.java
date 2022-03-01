@@ -29,12 +29,12 @@ public void setup(){
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
   sb = new ScoreBoard();
-  float acceleration=(height/1080)*0.3f;
+  float acceleration=(height/1080)*0.4f;
   float ease=(height/1080)*0.8f;
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
-  ball = new Ball(width/2,height/2,3,0,3,0,30);
+  ball = new Ball(width/2,height/2,10,0,3,0,30);
 }
 
 public void draw(){
@@ -220,13 +220,13 @@ class Ball
 
     }
 }
-class Paddle
+private class Paddle
 {
-    int widt;
+    private int widt;
     int heigh;
     float maxSpeed;
     float speed;
-    int xPos;
+    private int xPos;
     int yPos;
     float ease;
     float accel;
