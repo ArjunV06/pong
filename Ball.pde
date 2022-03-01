@@ -30,6 +30,7 @@ class Ball
         if(right)
         {
             xPos+=xVel;
+            
         }
         else
         {
