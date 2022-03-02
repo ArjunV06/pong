@@ -28,6 +28,7 @@ public void setup(){
   
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
+  //surface.setResizable(true);
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.4f;
   float ease=(height/1080)*0.8f;
@@ -190,11 +191,7 @@ class Ball
         if(right)
         {
             xPos+=xVel;
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> ae610c4a5cb2c407c0043b1798aa32607c24995f
         }
         else
         {
@@ -206,7 +203,7 @@ class Ball
     {
         boolean returnvar=false;
         
-        if(collisionCooldown)
+        if(collisionCooldown)   //has a significant effect on framerate
         {
             if(startFrame==0)
             {

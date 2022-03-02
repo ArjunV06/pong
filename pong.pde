@@ -12,6 +12,7 @@ void setup(){
   size(1920,1080,P2D);
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
+  //surface.setResizable(true);
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.4;
   float ease=(height/1080)*0.8;
