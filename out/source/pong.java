@@ -48,6 +48,8 @@ public void draw(){
   {
     rightBool=!rightBool;
   }
+  
+  
   ball.move(rightBool);
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
@@ -185,6 +187,7 @@ class Ball
         if(right)
         {
             xPos+=xVel;
+            
         }
         else
         {
@@ -219,14 +222,16 @@ class Ball
 
 
     }
+
+    
 }
-private class Paddle
+class Paddle
 {
-    private int widt;
+    int widt;
     int heigh;
     float maxSpeed;
     float speed;
-    private int xPos;
+    int xPos;
     int yPos;
     float ease;
     float accel;
