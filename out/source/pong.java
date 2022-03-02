@@ -22,6 +22,7 @@ Paddle right;
 Ball ball;
 int directionLeft=0;
 int directionRight=0;
+Button test;
 PFont font;
 boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(1)));
 public void setup(){
@@ -36,15 +37,26 @@ public void setup(){
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
   ball = new Ball(width/2,height/2,10,0,3,0,30);
+  test = new Button(width/2,height/2,500,500);
 }
 
 public void draw(){
+
   println(frameRate);
   left.confine();
   right.confine();
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
+  test.showFrame();
   ball.display();
+  if(test.leftHover())
+  {
+    rect(100,100,100,100);
+  }
+  if(test.leftClick())
+  {
+    rect(500,500,100,100);
+  }
   if(ball.collisionDetected(right) || ball.collisionDetected(left))
   {
     rightBool=!rightBool;
@@ -255,6 +267,76 @@ class Ball
     }
 
     
+}
+class Button
+{
+    int localXpos;
+    int localYpos;
+    int localWidth;
+    int localHeight;
+    boolean rightClick;
+    boolean leftClick;
+    Button(int xPos, int yPos, int width, int height)
+    {
+        localXpos=xPos;
+        localYpos=yPos;
+        localHeight=height;
+        localWidth=width;
+        rightClick=false;
+    }
+    public void showFrame()
+    {
+        pushStyle();
+        noFill();
+        stroke(20);
+        strokeWeight(4);
+        rectMode(CENTER);
+        rect(localXpos,localYpos,localWidth,localHeight);
+        popStyle();
+    }
+    public boolean rightClick()
+    {
+
+        if (mousePressed && (mouseButton == RIGHT) && mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
+        {
+            rightClick=true;
+        }
+        else
+        {
+            rightClick=false;
+        }
+        return rightClick;
+
+    }
+    public boolean leftClick()
+    {
+        if (mousePressed && (mouseButton == LEFT) && mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
+        {
+            leftClick=true;
+        }
+        else
+        {
+            leftClick=false;
+        }
+        return leftClick;
+    }
+
+    public boolean leftHover()
+    {
+        if(mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+
+    }
+
+
+
 }
 class Paddle
 {
