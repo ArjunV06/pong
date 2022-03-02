@@ -48,6 +48,8 @@ public void draw(){
   {
     rightBool=!rightBool;
   }
+  
+  
   ball.move(rightBool);
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
@@ -188,7 +190,11 @@ class Ball
         if(right)
         {
             xPos+=xVel;
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> ae610c4a5cb2c407c0043b1798aa32607c24995f
         }
         else
         {
@@ -250,6 +256,8 @@ class Ball
         return returnvar;
 
     }
+
+    
 }
 class Paddle
 {

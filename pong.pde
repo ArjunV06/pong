@@ -32,6 +32,8 @@ void draw(){
   {
     rightBool=!rightBool;
   }
+  
+  
   ball.move(rightBool);
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
