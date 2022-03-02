@@ -6,6 +6,7 @@ Paddle right;
 Ball ball;
 int directionLeft=0;
 int directionRight=0;
+Button test;
 PFont font;
 boolean rightBool=boolean(int(random(1)));
 void setup(){
@@ -20,15 +21,26 @@ void setup(){
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
   ball = new Ball(width/2,height/2,10,0,3,0,30);
+  test = new Button(width/2,height/2,500,500);
 }
 
 void draw(){
+
   println(frameRate);
   left.confine();
   right.confine();
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
+  test.showFrame();
   ball.display();
+  if(test.hover())
+  {
+    rect(100,100,100,100);
+  }
+  if(test.leftClick())
+  {
+    rect(500,500,100,100);
+  }
   if(ball.collisionDetected(right) || ball.collisionDetected(left))
   {
     rightBool=!rightBool;

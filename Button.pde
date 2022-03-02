@@ -8,20 +8,23 @@ class Button
     boolean leftClick;
     Button(int xPos, int yPos, int width, int height)
     {
-            localXpos=xPos;
-            localYpos=yPos;
+        localXpos=xPos;
+        localYpos=yPos;
         localHeight=height;
         localWidth=width;
         rightClick=false;
     }
-    void ShowFrame()
+    void showFrame()
     {
+        pushStyle();
         noFill();
         stroke(20);
+        strokeWeight(4);
         rectMode(CENTER);
         rect(localXpos,localYpos,localWidth,localHeight);
+        popStyle();
     }
-    boolean RightClick()
+    boolean rightClick()
     {
 
         if (mousePressed && (mouseButton == RIGHT) && mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
@@ -35,7 +38,7 @@ class Button
         return rightClick;
 
     }
-    boolean LeftClick()
+    boolean leftClick()
     {
         if (mousePressed && (mouseButton == LEFT) && mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
         {
@@ -47,5 +50,21 @@ class Button
         }
         return leftClick;
     }
+
+    boolean hover()
+    {
+        if(mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+
+    }
+
+
 
 }
