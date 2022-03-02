@@ -162,6 +162,8 @@ class Ball
     float yVel;
     float xAcc;
     float yAcc;
+    boolean collisionCooldown;
+    int startFrame=0;
 
     Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
     {
@@ -173,6 +175,7 @@ class Ball
         xAcc=xAcc_;
         yAcc=yAcc_;
         radius=radius_;
+        collisionCooldown=false;
 
     }
 
@@ -185,6 +188,7 @@ class Ball
         if(right)
         {
             xPos+=xVel;
+
         }
         else
         {
@@ -194,39 +198,66 @@ class Ball
     
     public boolean collisionDetected(Paddle paddle)
     {
-        int xDis = abs(this.xPos-paddle.xPos);
-        int yDis = abs(this.yPos-paddle.yPos);
-        if(xDis > (paddle.widt/2 + this.radius))
+        boolean returnvar=false;
+        
+        if(collisionCooldown)
         {
-            return false;
+            if(startFrame==0)
+            {
+                startFrame=frameCount;
+            }
+            else if(frameCount>startFrame+30)
+            {
+                collisionCooldown=!collisionCooldown;
+            }
+            println(startFrame);
         }
-        if(yDis > (paddle.heigh/2 + this.radius))
+        if(!collisionCooldown)
         {
-            return false;
-        }
-        if(xDis <= (paddle.widt/2))
-        {
+            int xDis = abs(this.xPos-paddle.xPos);
+            int yDis = abs(this.yPos-paddle.yPos);
+            if(xDis > (paddle.widt/2 + this.radius))
+            {
+                returnvar = false;
+                return returnvar;
+            }
+            if(yDis > (paddle.heigh/2 + this.radius))
+            {
+                returnvar = false;
+                return returnvar;
+            }
+            if(xDis <= (paddle.widt/2))
+            {
+                returnvar = true;
+                collisionCooldown=true;
+                return returnvar;
+            }
+            if(yDis <= (paddle.heigh/2))
+            {
+                returnvar = true;
+                collisionCooldown=true;
+                return returnvar;
+                
+            }
+
+            int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
+
+            if(cornerCase <= (ball.radius^2)) //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
             return true;
+
+            
         }
-        if(yDis <= (paddle.heigh/2))
-        {
-            return true;
-        }
-
-        int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
-
-        return (cornerCase <= (ball.radius^2)); //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
-
+        return returnvar;
 
     }
 }
-private class Paddle
+class Paddle
 {
-    private int widt;
+    int widt;
     int heigh;
     float maxSpeed;
     float speed;
-    private int xPos;
+    int xPos;
     int yPos;
     float ease;
     float accel;
