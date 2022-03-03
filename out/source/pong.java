@@ -24,9 +24,14 @@ int directionLeft=0;
 int directionRight=0;
 Button test;
 PFont font;
-boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(1)));
+boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
+boolean downBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
+
+
 public void setup()
 {
+  
+  
   
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
@@ -37,15 +42,16 @@ public void setup()
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
-  ball = new Ball(width/2,height/2,10,0,3,0,30);
+  ball = new Ball(width/2,height/2,10,3,3,3,30);
   test = new Button(width/2,height/2,500,500);
 }
 
 public void draw(){
 
-  println(frameRate);
+  //println(frameRate);
   left.confine();
   right.confine();
+  //ball.confine(left, right);
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
   test.showFrame();
@@ -58,13 +64,36 @@ public void draw(){
   {
     rect(500,500,100,100);
   }
-  if(ball.collisionDetected(right) || ball.collisionDetected(left))
+  if(ball.inBounds(left,right))
+  {  
+    //rect(100,100,100,100);
+    if(ball.collisionDetected(right) || ball.collisionDetected(left))
+    {
+      rightBool=!rightBool;
+      
+      
+      
+    }
+    else if(ball.collisionDetected())
+    {
+      downBool=!downBool;
+    }
+    
+  
+  }
+  if(ball.inBounds(sb))
   {
-    rightBool=!rightBool;
+    ball.move(rightBool,downBool,right,left);
+  }
+  else
+  {
+    ball.reset();
   }
   
-  
-  ball.move(rightBool);
+ 
+
+
+
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
   rectMode(CENTER);
@@ -199,22 +228,105 @@ class Ball
     {
         ellipse(xPos,yPos,radius*2,radius*2);
     }
-    public void move(boolean right)
+    public void move(boolean right, boolean down, Paddle rightp, Paddle left)
     {
         if(right)
         {
+            
             xPos+=xVel;
+            
 
         }
         else
         {
+            
             xPos-=xVel;
+            
+        }
+        if(down)
+        {
+            if(right)
+            {
+                yPos+=yVel*left.speed; //the way this is set up works PERFECT for a power up!!!
+                yPos=constrain(yPos,0+this.radius,height-this.radius);
+            }
+            
+        }
+        else
+        {
+            yPos-=yVel;
         }
     }
     
+    public void confine(Paddle left, Paddle right)
+    {
+        xPos=constrain(xPos,left.xPos+(left.widt/2)+this.radius-2, right.xPos-(right.widt/2)-this.radius+2);
+    }
+    public boolean inBounds(Paddle left, Paddle right)
+    {
+        //println(this.xPos, (right.xPos-(right.widt/2)), this.xPos, (left.xPos+(left.widt/2)));
+        if(this.xPos<=(right.xPos-(right.widt/2)) && (this.xPos>=(left.xPos+(left.widt/2))))
+        {
+            return true;
+        }
+        
+        else
+        {
+            return false;
+        }
+
+    }
+    public boolean inBounds()
+    {
+        if(this.xPos-this.radius>width || this.xPos+this.radius<0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean inBounds(ScoreBoard sb)
+    {
+        if(this.xPos-this.radius>width)
+        {   
+            sb.increaseRightScore();
+            return false;
+        }
+        else if(this.xPos+this.radius<0)
+        {
+            sb.increaseLeftScore();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public void reset()
+    {
+        ball.xPos=width/2;
+        ball.yPos=height/2;
+    }
+    public boolean collisionDetected()
+    {
+        if(this.yPos-this.radius<=0)
+        {
+            return true;
+        }
+        else if(this.yPos+this.radius>=height)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public boolean collisionDetected(Paddle paddle)
     {
-        println(collisionCooldown);
+        //println(collisionCooldown);
         boolean returnvar=false;
         
         if(collisionCooldown)   //has a significant effect on framerate
@@ -223,16 +335,63 @@ class Ball
             {
                 startFrame=frameCount;
             }
-            else if(frameCount>startFrame+30)
+            else if(frameCount>startFrame+45)
             {
                 collisionCooldown=!collisionCooldown;
             }
-            println(startFrame);
+            //println(startFrame);
         }
         if(!collisionCooldown)
         {
-            int xDis = abs(this.xPos-paddle.xPos);
-            int yDis = abs(this.yPos-paddle.yPos);
+            int xDis = abs(this.xPos-paddle.xPos-3);
+            int yDis = abs(this.yPos-paddle.yPos-3);
+            //int cornerCase = ((((xDis - paddle.widt/2))^2) + ((yDis - paddle.heigh/2))^2); //distance formula
+           
+           
+            int topLeftX=paddle.xPos-paddle.widt/2;
+            int topLeftY=paddle.yPos-paddle.heigh/2;
+
+            int topRightX=paddle.xPos+paddle.widt/2;
+            int topRightY=topLeftY;
+
+            int bottomLeftX=topLeftX;
+            int bottomLeftY=paddle.yPos+paddle.heigh/2;
+
+            int bottomRightX=topRightX;
+            int bottomRightY=bottomLeftY;
+
+            if(dist(topLeftX,topLeftY,this.xPos,this.yPos)<=this.radius+1)
+            {
+                collisionCooldown=true;
+                return true;
+                
+            }
+
+            if(dist(topRightX,topRightY,this.xPos,this.yPos)<=this.radius+1)
+            {
+                collisionCooldown=true;
+                return true;
+                
+            }
+
+            if(dist(bottomLeftX,bottomLeftY,this.xPos,this.yPos)<=this.radius+1)
+            {
+                collisionCooldown=true;
+                return true;
+                
+            }
+
+            if(dist(bottomRightX,bottomRightY,this.xPos,this.yPos)<=this.radius+1)
+            {
+                collisionCooldown=true;
+                return true;
+                
+            }
+
+            
+
+           
+           
             if(xDis > (paddle.widt/2 + this.radius))
             {
                 returnvar = false;
@@ -258,20 +417,21 @@ class Ball
                 return returnvar;
                 
             }
-
-            int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
-
-            if(cornerCase <= (ball.radius^2)) //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
+            /* if(cornerCase <= (this.radius^2)) //squared since we didnt sqrt prior
             {
                 collisionCooldown=true;
                 return true;
             }
+           */
+
+            
 
 
 
             
         }
-        return returnvar;
+        //return returnvar;
+        return false;
 
     }
 
@@ -634,7 +794,7 @@ class ScoreBoard {
   }
 }
 
-  public void settings() {  size(1920,1080,P2D); }
+  public void settings() {  size(1920,1080,P2D);  smooth(8); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "pong" };
     if (passedArgs != null) {

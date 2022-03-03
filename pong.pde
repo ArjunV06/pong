@@ -8,10 +8,15 @@ int directionLeft=0;
 int directionRight=0;
 Button test;
 PFont font;
-boolean rightBool=boolean(int(random(1)));
+boolean rightBool=boolean(int(random(0,1)));
+boolean downBool=boolean(int(random(0,1)));
+
+
 void setup()
 {
+  
   size(1920,1080,P2D);
+  smooth(8);
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
   //surface.setResizable(true);
@@ -21,15 +26,16 @@ void setup()
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
-  ball = new Ball(width/2,height/2,10,0,3,0,30);
+  ball = new Ball(width/2,height/2,10,3,3,3,30);
   test = new Button(width/2,height/2,500,500);
 }
 
 void draw(){
 
-  println(frameRate);
+  //println(frameRate);
   left.confine();
   right.confine();
+  //ball.confine(left, right);
   //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
   background(0);
   test.showFrame();
@@ -42,13 +48,36 @@ void draw(){
   {
     rect(500,500,100,100);
   }
-  if(ball.collisionDetected(right) || ball.collisionDetected(left))
+  if(ball.inBounds(left,right))
+  {  
+    //rect(100,100,100,100);
+    if(ball.collisionDetected(right) || ball.collisionDetected(left))
+    {
+      rightBool=!rightBool;
+      
+      
+      
+    }
+    else if(ball.collisionDetected())
+    {
+      downBool=!downBool;
+    }
+    
+  
+  }
+  if(ball.inBounds(sb))
   {
-    rightBool=!rightBool;
+    ball.move(rightBool,downBool,right,left);
+  }
+  else
+  {
+    ball.reset();
   }
   
-  
-  ball.move(rightBool);
+ 
+
+
+
   left.displayPower(width/2-width/4,height-30,width/5,20);
   right.displayPower(width/2+width/4,height-30,width/5,20);
   rectMode(CENTER);
