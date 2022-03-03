@@ -9,7 +9,8 @@ int directionRight=0;
 Button test;
 PFont font;
 boolean rightBool=boolean(int(random(1)));
-void setup(){
+void setup()
+{
   size(1920,1080,P2D);
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);

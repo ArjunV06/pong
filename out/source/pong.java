@@ -25,7 +25,8 @@ int directionRight=0;
 Button test;
 PFont font;
 boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(1)));
-public void setup(){
+public void setup()
+{
   
   //fullScreen(3);
   //size(displayWidth,displayHeight,P2D);
@@ -49,7 +50,7 @@ public void draw(){
   background(0);
   test.showFrame();
   ball.display();
-  if(test.leftHover())
+  if(test.hover())
   {
     rect(100,100,100,100);
   }
@@ -213,6 +214,7 @@ class Ball
     
     public boolean collisionDetected(Paddle paddle)
     {
+        println(collisionCooldown);
         boolean returnvar=false;
         
         if(collisionCooldown)   //has a significant effect on framerate
@@ -234,11 +236,13 @@ class Ball
             if(xDis > (paddle.widt/2 + this.radius))
             {
                 returnvar = false;
+                collisionCooldown=false;
                 return returnvar;
             }
             if(yDis > (paddle.heigh/2 + this.radius))
             {
                 returnvar = false;
+                collisionCooldown=false;
                 return returnvar;
             }
             if(xDis <= (paddle.widt/2))
@@ -258,7 +262,12 @@ class Ball
             int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
 
             if(cornerCase <= (ball.radius^2)) //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
-            return true;
+            {
+                collisionCooldown=true;
+                return true;
+            }
+
+
 
             
         }
@@ -321,7 +330,7 @@ class Button
         return leftClick;
     }
 
-    public boolean leftHover()
+    public boolean hover()
     {
         if(mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
         {

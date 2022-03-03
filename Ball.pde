@@ -43,6 +43,7 @@ class Ball
     
     boolean collisionDetected(Paddle paddle)
     {
+        println(collisionCooldown);
         boolean returnvar=false;
         
         if(collisionCooldown)   //has a significant effect on framerate
@@ -64,11 +65,13 @@ class Ball
             if(xDis > (paddle.widt/2 + this.radius))
             {
                 returnvar = false;
+                collisionCooldown=false;
                 return returnvar;
             }
             if(yDis > (paddle.heigh/2 + this.radius))
             {
                 returnvar = false;
+                collisionCooldown=false;
                 return returnvar;
             }
             if(xDis <= (paddle.widt/2))
@@ -88,7 +91,12 @@ class Ball
             int cornerCase = (((xDis - paddle.widt/2)^2) + ((yDis - paddle.heigh/2)^2)); //for if it is detected in the corner (used distance formula) 
 
             if(cornerCase <= (ball.radius^2)) //if distance of center of ball to the center of circle <radius^2 aka a radius away from circle
-            return true;
+            {
+                collisionCooldown=true;
+                return true;
+            }
+
+
 
             
         }
