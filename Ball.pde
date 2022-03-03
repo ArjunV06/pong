@@ -3,6 +3,8 @@ class Ball
     int xPos;
     int yPos;
     int radius;
+    float xVelInitial;
+    float yVelInitial;
     float xVel;
     float yVel;
     float xAcc;
@@ -21,7 +23,8 @@ class Ball
         yAcc=yAcc_;
         radius=radius_;
         collisionCooldown=false;
-
+        yVelInitial=yVel;
+        xVelInitial=xVel;
     }
 
     void display()
@@ -34,6 +37,8 @@ class Ball
         {
             
             xPos+=xVel;
+            xVel+=xAcc;
+            yVel+=yAcc;
             
 
         }
@@ -41,6 +46,8 @@ class Ball
         {
             
             xPos-=xVel;
+            xVel+=xAcc;
+            yVel+=yAcc;
             
         }
         if(down)
@@ -58,10 +65,12 @@ class Ball
             }*/
             
             yPos+=yVel;
+            
         }
         else
         {
             yPos-=yVel;
+            
         }
     }
     
@@ -115,14 +124,16 @@ class Ball
     {
         ball.xPos=width/2;
         ball.yPos=height/2;
+        ball.xVel=xVelInitial;
+        ball.yVel=yVelInitial;
     }
     boolean collisionDetected()
     {
-        if(this.yPos-this.radius<=0)
+        if(this.yPos-this.radius<=0+2)
         {
             return true;
         }
-        else if(this.yPos+this.radius>=height)
+        else if(this.yPos+this.radius>=height-2)
         {
             return true;
         }
@@ -142,13 +153,14 @@ class Ball
             {
                 startFrame=frameCount;
             }
-            else if(frameCount>startFrame+45)
+            else if(frameCount>startFrame+20)
             {
                 collisionCooldown=!collisionCooldown;
+                startFrame=0;
             }
             //println(startFrame);
         }
-        if(!collisionCooldown)
+        else if(!collisionCooldown)
         {
             int xDis = abs(this.xPos-paddle.xPos-3);
             int yDis = abs(this.yPos-paddle.yPos-3);
