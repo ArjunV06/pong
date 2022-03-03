@@ -245,12 +245,19 @@ class Ball
         }
         if(down)
         {
-            if(right)
+            /*if(right)
             {
+                yPos=constrain(yPos,0+this.radius+3,height-this.radius-3);
                 yPos+=yVel*left.speed; //the way this is set up works PERFECT for a power up!!!
-                yPos=constrain(yPos,0+this.radius,height-this.radius);
+                
             }
+            else
+            {
+                yPos=constrain(yPos,0+this.radius+3,height-this.radius-3);
+                yPos+=yVel*rightp.speed; //the way this is set up works PERFECT for a power up!!!
+            }*/
             
+            yPos+=yVel;
         }
         else
         {
