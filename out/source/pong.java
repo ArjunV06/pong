@@ -374,21 +374,21 @@ class Ball
                 
             }
 
-            if(dist(topRightX,topRightY,this.xPos,this.yPos)<=this.radius+1)
+            else if(dist(topRightX,topRightY,this.xPos,this.yPos)<=this.radius+1)
             {
                 collisionCooldown=true;
                 return true;
                 
             }
 
-            if(dist(bottomLeftX,bottomLeftY,this.xPos,this.yPos)<=this.radius+1)
+            else if(dist(bottomLeftX,bottomLeftY,this.xPos,this.yPos)<=this.radius+1)
             {
                 collisionCooldown=true;
                 return true;
                 
             }
 
-            if(dist(bottomRightX,bottomRightY,this.xPos,this.yPos)<=this.radius+1)
+            else if(dist(bottomRightX,bottomRightY,this.xPos,this.yPos)<=this.radius+1)
             {
                 collisionCooldown=true;
                 return true;
@@ -399,25 +399,25 @@ class Ball
 
            
            
-            if(xDis > (paddle.widt/2 + this.radius))
+            else if(xDis > (paddle.widt/2 + this.radius))
             {
                 returnvar = false;
-                collisionCooldown=false;
+                //collisionCooldown=false;
                 return returnvar;
             }
-            if(yDis > (paddle.heigh/2 + this.radius))
+            else if(yDis > (paddle.heigh/2 + this.radius))
             {
                 returnvar = false;
-                collisionCooldown=false;
+                //collisionCooldown=false;
                 return returnvar;
             }
-            if(xDis <= (paddle.widt/2))
+            else if(xDis <= (paddle.widt/2))
             {
                 returnvar = true;
                 collisionCooldown=true;
                 return returnvar;
             }
-            if(yDis <= (paddle.heigh/2))
+            else if(yDis <= (paddle.heigh/2))
             {
                 returnvar = true;
                 collisionCooldown=true;
