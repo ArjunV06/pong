@@ -10,6 +10,8 @@ class Ball
     float xAcc;
     float yAcc;
     boolean collisionCooldown;
+    boolean goingDown;
+    boolean goingRight;
     int startFrame=0;
 
     Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
@@ -31,9 +33,9 @@ class Ball
     {
         ellipse(xPos,yPos,radius*2,radius*2);
     }
-    void move(boolean right, boolean down, Paddle rightp, Paddle left)
+    void move(Paddle rightp, Paddle left)
     {
-        if(right)
+        if(goingRight)
         {
             
             xPos+=xVel;
@@ -58,7 +60,7 @@ class Ball
             
             
         }
-        if(down)
+        if(goingDown)
         {
             /*if(right)
             {

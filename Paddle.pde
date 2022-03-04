@@ -41,6 +41,10 @@ class Paddle
         bounceOff=bounce;
     }
 
+    void reset()
+    {
+        yPos=height/2;
+    }
     void display()
     {
         pushStyle();

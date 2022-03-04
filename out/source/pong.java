@@ -15,7 +15,7 @@ import java.io.IOException;
 public class pong extends PApplet {
 
 
-
+ArrayList<Ball> balls = new ArrayList<Ball>();
 ScoreBoard sb;
 Paddle left;
 Paddle right;
@@ -29,8 +29,8 @@ Button tutorialButton;
 Button pongButton;
 PFont font;
 PFont sbFont;
-boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
-boolean downBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
+//boolean quick.goingRight=boolean(int(random(0,1)));
+//boolean quick.goingDown=boolean(int(random(0,1)));
 Button mainMenu;
 
 public void setup()
@@ -49,7 +49,8 @@ public void setup()
   sbFont = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
-  ball = new Ball(width/2,height/2,10,3,0.005f,0.005f,8);
+  balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
+  //ball = new Ball(width/2,height/2,10,3,0.005,0.005,8);
   textAlign(CENTER, CENTER);
   settingsButton = new Button();
   startButton = new Button();
@@ -65,8 +66,12 @@ public void draw(){
   switch(screen)
   {
     case(2):
-
+      pushStyle();
+      textSize(64);
       text("PRESS TAB TO UNPAUSE",width/2,100);
+      text("PRESS CONTROL TO GO TO MAIN MENU",width/2,height/2);
+      text("PRESS SHIFT TO RESET GAME",width/2,height-100);
+      popStyle();
     break;
     case(0):
       pongButton.display(width/2,200,300,100,"PONG",165,false);
@@ -84,68 +89,73 @@ public void draw(){
       
     case(1):
       //println(frameRate);
-      println(ball.xVel, ball.yVel);
+      //println(ball.xVel, ball.yVel);
       left.confine();
       right.confine();
       //ball.confine(left, right);
       //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
       
-      
-      ball.display();
-      
-      //if(ball.inBounds(left,right))
-      
-        //rect(100,100,100,100);
-        if(ball.collisionDetected(right))
-        {
-          if(right.speed>0)
-          {
-            downBool=false;
-          }
-          else
-          {
-            downBool=true;
-          }
-          rightBool=!rightBool;
-          ball.speedChange(right);
-
-          
-          
-          
-          
-          
-        }
-        else if(ball.collisionDetected(left))
-        {
-
-          if(left.speed>0)
-          {
-            downBool=false;
-          }
-          else
-          {
-            downBool=true;
-          }
-
-          rightBool=!rightBool;
-          ball.speedChange(left);
-        
-        }
-        else if(ball.collisionDetected())
-        {
-          downBool=!downBool;
-        }
-        
-      
-      
-      
-      if(ball.inBounds(sb))
+      for(int i=0; i<balls.size(); i++)
       {
-        ball.move(rightBool,downBool,right,left);
-      }
-      else
-      {
-        ball.reset();
+        Ball quick = balls.get(i);
+        quick.display();
+        
+        
+        
+          //if(ball.inBounds(left,right))
+        
+          //rect(100,100,100,100);
+          if(quick.collisionDetected(right))
+          {
+            if(right.speed>0)
+            {
+              quick.goingDown=false;
+            }
+            else
+            {
+              quick.goingDown=true;
+            }
+            quick.goingRight=!quick.goingRight;
+            quick.speedChange(right);
+
+            
+            
+            
+            
+            
+          }
+          else if(quick.collisionDetected(left))
+          {
+
+            if(left.speed>0)
+            {
+              quick.goingDown=false;
+            }
+            else
+            {
+              quick.goingDown=true;
+            }
+
+            quick.goingRight=!quick.goingRight;
+            quick.speedChange(left);
+          
+          }
+          else if(quick.collisionDetected())
+          {
+            quick.goingDown=!quick.goingDown;
+          }
+          
+        
+        
+        
+        if(quick.inBounds(sb))
+        {
+          quick.move(right,left);
+        }
+        else
+        {
+          quick.reset();
+        }
       }
       
     
@@ -261,7 +271,41 @@ public void keyPressed()
     }
       
   }
+  if(keyCode==16)
+  {
+    switch(screen)
+    {
+      case 2:
+        resetAll();
+        screen=1;
+      break;
+    }
+  }
+  if(keyCode==17)
+  {
+    switch(screen)
+    {
+      case 2:
+        resetAll();
+        screen=0;
+      break;
+    }
+
+  }
   
+}
+public void resetAll()
+{
+  sb.reset();
+  for(int i=balls.size(); i>0; i--)
+  {
+    Ball delQuick=balls.get(i);
+    delQuick.reset();
+    balls.remove(i);
+  }
+  
+  right.reset();
+  left.reset();
 }
 public void keyReleased() 
 {
@@ -304,6 +348,8 @@ class Ball
     float xAcc;
     float yAcc;
     boolean collisionCooldown;
+    boolean goingDown;
+    boolean goingRight;
     int startFrame=0;
 
     Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
@@ -325,9 +371,9 @@ class Ball
     {
         ellipse(xPos,yPos,radius*2,radius*2);
     }
-    public void move(boolean right, boolean down, Paddle rightp, Paddle left)
+    public void move(Paddle rightp, Paddle left)
     {
-        if(right)
+        if(goingRight)
         {
             
             xPos+=xVel;
@@ -352,7 +398,7 @@ class Ball
             
             
         }
-        if(down)
+        if(goingDown)
         {
             /*if(right)
             {
@@ -689,6 +735,10 @@ class Paddle
         bounceOff=bounce;
     }
 
+    public void reset()
+    {
+        yPos=height/2;
+    }
     public void display()
     {
         pushStyle();
