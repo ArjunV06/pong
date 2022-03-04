@@ -69,7 +69,7 @@ class Paddle
 
     void confine()
     {
-        yPos=constrain(yPos,heigh/2+30,height-heigh/2-30);
+        yPos=constrain(yPos,heigh/2+10,height-heigh/2-10);
     }
 
     void up()
@@ -84,7 +84,7 @@ class Paddle
             
         }
         //println(heigh/2-height);
-        if(yPos>=heigh/2+30 && yPos<=height-(heigh/2+30))
+        if(yPos>=heigh/2+10 && yPos<=height-(heigh/2+10))
         {
             yPos-=int(speed);
             wallcollision=false;
@@ -122,7 +122,7 @@ class Paddle
         {
             speed=0;
         }
-        if(yPos>=heigh/2+30 && yPos<=height-heigh/2-30)
+        if(yPos>=heigh/2+10 && yPos<=height-heigh/2-10)
         {
             yPos-=int(speed);
             wallcollision=false;
@@ -163,7 +163,7 @@ class Paddle
             
        // }
         //println(heigh/2-height);
-        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
+        if(yPos<=height-heigh/2-10 && yPos>=heigh/2+10)
         {
             yPos-=int(speed);
             wallcollision=false;
@@ -202,7 +202,7 @@ class Paddle
         {
             speed=0;
         }
-        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
+        if(yPos<=height-heigh/2-10 && yPos>=heigh/2+10)
         {
             yPos-=int(speed);
             wallcollision=false;

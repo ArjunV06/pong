@@ -33,7 +33,8 @@ public void setup()
 {
   
   
-  
+  //smooth(8);
+  frameRate(60);
   //fullScreen();
   //size(displayWidth,displayHeight,P2D);
   //surface.setResizable(true);
@@ -43,7 +44,7 @@ public void setup()
   font = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
-  ball = new Ball(width/2,height/2,10,3,0.005f,0.0025f,10);
+  ball = new Ball(width/2,height/2,10,3,0.005f,0.0025f,8);
   test = new Button(width/2,height/2,500,500);
 }
 
@@ -71,12 +72,40 @@ public void draw(){
       //if(ball.inBounds(left,right))
       
         //rect(100,100,100,100);
-        if(ball.collisionDetected(right) || ball.collisionDetected(left))
+        if(ball.collisionDetected(right))
         {
+          if(right.speed>0)
+          {
+            downBool=false;
+          }
+          else
+          {
+            downBool=true;
+          }
           rightBool=!rightBool;
+          ball.yVel*=abs((right.speed/10));
+          ball.yVel+=0.5f;
           
           
           
+          
+        }
+        else if(ball.collisionDetected(left))
+        {
+
+          if(left.speed>0)
+          {
+            downBool=false;
+          }
+          else
+          {
+            downBool=true;
+          }
+
+          rightBool=!rightBool;
+          ball.yVel*=abs((left.speed/10));
+          ball.yVel+=0.5f;
+        
         }
         else if(ball.collisionDetected())
         {
@@ -274,24 +303,24 @@ class Ball
         }
         if(down)
         {
-            /*if(right)
+            if(right)
             {
-                yPos=constrain(yPos,0+this.radius+3,height-this.radius-3);
+                yPos=constrain(yPos,0+this.radius+30,height-this.radius-30);
                 yPos+=yVel*left.speed; //the way this is set up works PERFECT for a power up!!!
                 
             }
             else
             {
-                yPos=constrain(yPos,0+this.radius+3,height-this.radius-3);
+                yPos=constrain(yPos,0+this.radius+30,height-this.radius-30);
                 yPos+=yVel*rightp.speed; //the way this is set up works PERFECT for a power up!!!
-            }*/
+            }
             
-            yPos+=yVel;
+            yPos+=PApplet.parseInt(yVel);
             
         }
         else
         {
-            yPos-=yVel;
+            yPos-=PApplet.parseInt(yVel);
             
         }
     }
@@ -619,7 +648,7 @@ class Paddle
 
     public void confine()
     {
-        yPos=constrain(yPos,heigh/2+30,height-heigh/2-30);
+        yPos=constrain(yPos,heigh/2+10,height-heigh/2-10);
     }
 
     public void up()
@@ -634,7 +663,7 @@ class Paddle
             
         }
         //println(heigh/2-height);
-        if(yPos>=heigh/2+30 && yPos<=height-(heigh/2+30))
+        if(yPos>=heigh/2+10 && yPos<=height-(heigh/2+10))
         {
             yPos-=PApplet.parseInt(speed);
             wallcollision=false;
@@ -672,7 +701,7 @@ class Paddle
         {
             speed=0;
         }
-        if(yPos>=heigh/2+30 && yPos<=height-heigh/2-30)
+        if(yPos>=heigh/2+10 && yPos<=height-heigh/2-10)
         {
             yPos-=PApplet.parseInt(speed);
             wallcollision=false;
@@ -713,7 +742,7 @@ class Paddle
             
        // }
         //println(heigh/2-height);
-        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
+        if(yPos<=height-heigh/2-10 && yPos>=heigh/2+10)
         {
             yPos-=PApplet.parseInt(speed);
             wallcollision=false;
@@ -752,7 +781,7 @@ class Paddle
         {
             speed=0;
         }
-        if(yPos<=height-heigh/2-30 && yPos>=heigh/2+30)
+        if(yPos<=height-heigh/2-10 && yPos>=heigh/2+10)
         {
             yPos-=PApplet.parseInt(speed);
             wallcollision=false;
@@ -835,7 +864,7 @@ class ScoreBoard {
   }
 }
 
-  public void settings() {  size(1920,1080,P2D);  smooth(8); }
+  public void settings() {  size(1920,1080,P2D); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "pong" };
     if (passedArgs != null) {
