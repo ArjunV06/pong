@@ -97,7 +97,9 @@ public void draw(){
       
       for(int i=0; i<balls.size(); i++)
       {
+        
         Ball quick = balls.get(i);
+        
         quick.display();
         
         
@@ -218,6 +220,7 @@ public void draw(){
   
 public void keyPressed() 
 { 
+
   println(keyCode);
   switch(screen)
   {
@@ -292,16 +295,33 @@ public void keyPressed()
     }
 
   }
+  if(keyCode==32)
+  {
+    balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
+    
+    
+      int quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+      Ball quick = balls.get(balls.size()-1);
+      quick.colorSet(quickColor);
+     
+  }
+  if(keyCode==45)
+  {
+    if(balls.size()>1)
+    balls.remove(balls.size()-1);
+  }
   
 }
 public void resetAll()
 {
   sb.reset();
-  for(int i=balls.size(); i>0; i--)
+  for(int i=balls.size(); i>1; i--)
   {
-    Ball delQuick=balls.get(i);
+    balls.remove(i-1);
+    Ball delQuick=balls.get(0);
     delQuick.reset();
-    balls.remove(i);
+    
+    
   }
   
   right.reset();
@@ -351,6 +371,7 @@ class Ball
     boolean goingDown;
     boolean goingRight;
     int startFrame=0;
+    int ballColor=color((255));
 
     Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
     {
@@ -369,10 +390,21 @@ class Ball
 
     public void display()
     {
+        pushStyle();
+        fill(ballColor);
         ellipse(xPos,yPos,radius*2,radius*2);
+        popStyle();
+    }
+    public void colorSet(int quickC)
+    {
+        ballColor=quickC;
     }
     public void move(Paddle rightp, Paddle left)
     {
+        if(yVel>20)
+        {
+            yVel=yVel-10;
+        }
         if(goingRight)
         {
             
@@ -393,7 +425,7 @@ class Ball
             }
             else
             {
-                yVel-=yAcc*4;
+                yVel-=yAcc*yVel;
             }
             
             
@@ -475,10 +507,18 @@ class Ball
     }
     public void reset()
     {
-        ball.xPos=width/2;
-        ball.yPos=height/2;
-        ball.xVel=xVelInitial;
-        ball.yVel=yVelInitial;
+        xPos=width/2;
+        yPos=height/2;
+        if(random(1)>0.5f)
+        {
+            xVel=xVelInitial;
+        }
+        else
+        {
+            xVel=-xVelInitial;
+        }
+        
+        yVel=yVelInitial+random(-15,15);
     }
     public boolean collisionDetected()
     {

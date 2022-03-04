@@ -13,6 +13,7 @@ class Ball
     boolean goingDown;
     boolean goingRight;
     int startFrame=0;
+    color ballColor=color((255));
 
     Ball(int xPosl,int yPos_, float xVel_, float yVel_, float xAcc_, float yAcc_, int radius_)
     {
@@ -31,10 +32,21 @@ class Ball
 
     void display()
     {
+        pushStyle();
+        fill(ballColor);
         ellipse(xPos,yPos,radius*2,radius*2);
+        popStyle();
+    }
+    void colorSet(color quickC)
+    {
+        ballColor=quickC;
     }
     void move(Paddle rightp, Paddle left)
     {
+        if(yVel>20)
+        {
+            yVel=yVel-10;
+        }
         if(goingRight)
         {
             
@@ -55,7 +67,7 @@ class Ball
             }
             else
             {
-                yVel-=yAcc*4;
+                yVel-=yAcc*yVel;
             }
             
             
@@ -137,10 +149,18 @@ class Ball
     }
     void reset()
     {
-        ball.xPos=width/2;
-        ball.yPos=height/2;
-        ball.xVel=xVelInitial;
-        ball.yVel=yVelInitial;
+        xPos=width/2;
+        yPos=height/2;
+        if(random(1)>0.5)
+        {
+            xVel=xVelInitial;
+        }
+        else
+        {
+            xVel=-xVelInitial;
+        }
+        
+        yVel=yVelInitial+random(-15,15);
     }
     boolean collisionDetected()
     {
