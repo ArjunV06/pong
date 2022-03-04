@@ -38,7 +38,7 @@ class Ball
             
             xPos+=xVel;
             xVel+=xAcc;
-            yVel+=yAcc;
+            yVel-=yAcc;
             
 
         }
@@ -47,7 +47,15 @@ class Ball
             
             xPos-=xVel;
             xVel+=xAcc;
-            yVel+=yAcc;
+            if(yVel<5)
+            {
+                yVel+=yAcc;
+            }
+            else
+            {
+                yVel-=yAcc*4;
+            }
+            
             
         }
         if(down)
@@ -103,16 +111,21 @@ class Ball
             return true;
         }
     }
+    void speedChange(Paddle paddle)
+    {
+        yVel*=abs((paddle.speed/10));
+        yVel+=random(3);
+    }
     boolean inBounds(ScoreBoard sb)
     {
         if(this.xPos-this.radius>width)
         {   
-            sb.increaseRightScore();
+            sb.increaseLeftScore();
             return false;
         }
         else if(this.xPos+this.radius<0)
         {
-            sb.increaseLeftScore();
+            sb.increaseRightScore();
             return false;
         }
         else

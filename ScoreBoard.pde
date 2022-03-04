@@ -20,7 +20,7 @@ class ScoreBoard {
   void display(){
     pushStyle();
     
-    textFont(font);
+    textFont(sbFont);
     String score = leftScore + "       " +rightScore;
     textAlign(CENTER);
     text(score,width/2,height/8);

@@ -7,11 +7,15 @@ Ball ball;
 int directionLeft=0;
 int directionRight=0;
 int screen=0;
-Button test;
+Button settingsButton;
+Button startButton;
+Button tutorialButton;
+Button pongButton;
 PFont font;
+PFont sbFont;
 boolean rightBool=boolean(int(random(0,1)));
 boolean downBool=boolean(int(random(0,1)));
-
+Button mainMenu;
 
 void setup()
 {
@@ -25,34 +29,54 @@ void setup()
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.4;
   float ease=(height/1080)*0.8;
-  font = createFont("bit5x3.ttf",128);
+  font = createFont("arturito.ttf",128);
+  sbFont = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
-  ball = new Ball(width/2,height/2,10,3,0.005,0.0025,8);
-  test = new Button(width/2,height/2,500,500);
+  ball = new Ball(width/2,height/2,10,3,0.005,0.005,8);
+  textAlign(CENTER, CENTER);
+  settingsButton = new Button();
+  startButton = new Button();
+  tutorialButton = new Button();
+  pongButton = new Button();
+  mainMenu = new Button();
+
+
 }
 
 void draw(){
+  background(0);
   switch(screen)
   {
+    case(2):
+
+      text("PRESS TAB TO UNPAUSE",width/2,100);
+    break;
     case(0):
-      println(frameRate);
+      pongButton.display(width/2,200,300,100,"PONG",165,false);
+
+      //settingsButton.display(width/3,height/2,600,300,"SETTINGS",64,true);
+      //settingsButton.hover();
+
+      startButton.display(width/3,height/2,400,200,"PLAY",64,true);
+      startButton.hover();
+      if(startButton.leftClick())
+      {
+        screen++;
+      }
+    break;
+      
+    case(1):
+      //println(frameRate);
       println(ball.xVel, ball.yVel);
       left.confine();
       right.confine();
       //ball.confine(left, right);
       //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
-      background(0);
-      test.showFrame();
+      
+      
       ball.display();
-      if(test.hover())
-      {
-        rect(100,100,100,100);
-      }
-      if(test.leftClick())
-      {
-        rect(500,500,100,100);
-      }
+      
       //if(ball.inBounds(left,right))
       
         //rect(100,100,100,100);
@@ -67,8 +91,9 @@ void draw(){
             downBool=true;
           }
           rightBool=!rightBool;
-          ball.yVel*=abs((right.speed/10));
-          ball.yVel+=0.5;
+          ball.speedChange(right);
+
+          
           
           
           
@@ -87,8 +112,7 @@ void draw(){
           }
 
           rightBool=!rightBool;
-          ball.yVel*=abs((left.speed/10));
-          ball.yVel+=0.5;
+          ball.speedChange(left);
         
         }
         else if(ball.collisionDetected())
@@ -171,7 +195,7 @@ void keyPressed()
   println(keyCode);
   switch(screen)
   {
-    case 0:
+    case 1:
       switch(keyCode)
       {
         case 65:
@@ -198,17 +222,36 @@ void keyPressed()
         case 40:
         case 98:
           directionRight=3;
+        break;
+        
         
         
       }
     break;
+  
+    
+    
+  }       
+  if(keyCode==9)
+  {
+    switch(screen)
+    {
+      case 1:
+        screen=2;
+      break;
+      case 2:
+        screen=1;
+      break;
+    }
+      
   }
+  
 }
 void keyReleased() 
 {
   switch(screen)
   {
-    case 0:
+    case 1:
       switch(keyCode)
       {
         case 87:

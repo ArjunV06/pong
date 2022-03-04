@@ -23,11 +23,15 @@ Ball ball;
 int directionLeft=0;
 int directionRight=0;
 int screen=0;
-Button test;
+Button settingsButton;
+Button startButton;
+Button tutorialButton;
+Button pongButton;
 PFont font;
+PFont sbFont;
 boolean rightBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
 boolean downBool=PApplet.parseBoolean(PApplet.parseInt(random(0,1)));
-
+Button mainMenu;
 
 public void setup()
 {
@@ -41,34 +45,54 @@ public void setup()
   sb = new ScoreBoard();
   float acceleration=(height/1080)*0.4f;
   float ease=(height/1080)*0.8f;
-  font = createFont("bit5x3.ttf",128);
+  font = createFont("arturito.ttf",128);
+  sbFont = createFont("bit5x3.ttf",128);
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
-  ball = new Ball(width/2,height/2,10,3,0.005f,0.0025f,8);
-  test = new Button(width/2,height/2,500,500);
+  ball = new Ball(width/2,height/2,10,3,0.005f,0.005f,8);
+  textAlign(CENTER, CENTER);
+  settingsButton = new Button();
+  startButton = new Button();
+  tutorialButton = new Button();
+  pongButton = new Button();
+  mainMenu = new Button();
+
+
 }
 
 public void draw(){
+  background(0);
   switch(screen)
   {
+    case(2):
+
+      text("PRESS TAB TO UNPAUSE",width/2,100);
+    break;
     case(0):
-      println(frameRate);
+      pongButton.display(width/2,200,300,100,"PONG",165,false);
+
+      //settingsButton.display(width/3,height/2,600,300,"SETTINGS",64,true);
+      //settingsButton.hover();
+
+      startButton.display(width/3,height/2,400,200,"PLAY",64,true);
+      startButton.hover();
+      if(startButton.leftClick())
+      {
+        screen++;
+      }
+    break;
+      
+    case(1):
+      //println(frameRate);
       println(ball.xVel, ball.yVel);
       left.confine();
       right.confine();
       //ball.confine(left, right);
       //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
-      background(0);
-      test.showFrame();
+      
+      
       ball.display();
-      if(test.hover())
-      {
-        rect(100,100,100,100);
-      }
-      if(test.leftClick())
-      {
-        rect(500,500,100,100);
-      }
+      
       //if(ball.inBounds(left,right))
       
         //rect(100,100,100,100);
@@ -83,8 +107,9 @@ public void draw(){
             downBool=true;
           }
           rightBool=!rightBool;
-          ball.yVel*=abs((right.speed/10));
-          ball.yVel+=0.5f;
+          ball.speedChange(right);
+
+          
           
           
           
@@ -103,8 +128,7 @@ public void draw(){
           }
 
           rightBool=!rightBool;
-          ball.yVel*=abs((left.speed/10));
-          ball.yVel+=0.5f;
+          ball.speedChange(left);
         
         }
         else if(ball.collisionDetected())
@@ -187,7 +211,7 @@ public void keyPressed()
   println(keyCode);
   switch(screen)
   {
-    case 0:
+    case 1:
       switch(keyCode)
       {
         case 65:
@@ -214,17 +238,36 @@ public void keyPressed()
         case 40:
         case 98:
           directionRight=3;
+        break;
+        
         
         
       }
     break;
+  
+    
+    
+  }       
+  if(keyCode==9)
+  {
+    switch(screen)
+    {
+      case 1:
+        screen=2;
+      break;
+      case 2:
+        screen=1;
+      break;
+    }
+      
   }
+  
 }
 public void keyReleased() 
 {
   switch(screen)
   {
-    case 0:
+    case 1:
       switch(keyCode)
       {
         case 87:
@@ -289,7 +332,7 @@ class Ball
             
             xPos+=xVel;
             xVel+=xAcc;
-            yVel+=yAcc;
+            yVel-=yAcc;
             
 
         }
@@ -298,12 +341,20 @@ class Ball
             
             xPos-=xVel;
             xVel+=xAcc;
-            yVel+=yAcc;
+            if(yVel<5)
+            {
+                yVel+=yAcc;
+            }
+            else
+            {
+                yVel-=yAcc*4;
+            }
+            
             
         }
         if(down)
         {
-            if(right)
+            /*if(right)
             {
                 yPos=constrain(yPos,0+this.radius+30,height-this.radius-30);
                 yPos+=yVel*left.speed; //the way this is set up works PERFECT for a power up!!!
@@ -313,7 +364,7 @@ class Ball
             {
                 yPos=constrain(yPos,0+this.radius+30,height-this.radius-30);
                 yPos+=yVel*rightp.speed; //the way this is set up works PERFECT for a power up!!!
-            }
+            }*/
             
             yPos+=PApplet.parseInt(yVel);
             
@@ -354,16 +405,21 @@ class Ball
             return true;
         }
     }
+    public void speedChange(Paddle paddle)
+    {
+        yVel*=abs((paddle.speed/10));
+        yVel+=random(3);
+    }
     public boolean inBounds(ScoreBoard sb)
     {
         if(this.xPos-this.radius>width)
         {   
-            sb.increaseRightScore();
+            sb.increaseLeftScore();
             return false;
         }
         else if(this.xPos+this.radius<0)
         {
-            sb.increaseLeftScore();
+            sb.increaseRightScore();
             return false;
         }
         else
@@ -515,24 +571,32 @@ class Button
     int localHeight;
     boolean rightClick;
     boolean leftClick;
-    Button(int xPos, int yPos, int width, int height)
+    Button()
+    {
+        
+    }
+    public void display(int xPos, int yPos, int width, int height, String text, int fontSize, boolean trueb)
     {
         localXpos=xPos;
         localYpos=yPos;
         localHeight=height;
         localWidth=width;
         rightClick=false;
-    }
-    public void showFrame()
-    {
         pushStyle();
+        textAlign(CENTER,CENTER);
+        textFont((font),fontSize);
+        text(text,xPos,yPos);
         noFill();
-        stroke(20);
-        strokeWeight(4);
+        stroke(255);
+        strokeWeight(8);
         rectMode(CENTER);
+        if(trueb)
         rect(localXpos,localYpos,localWidth,localHeight);
+
+
         popStyle();
     }
+    
     public boolean rightClick()
     {
 
@@ -564,6 +628,11 @@ class Button
     {
         if(mouseX>(localXpos-localWidth/2) && mouseX<(localXpos+localWidth/2) && mouseY>(localYpos-localHeight/2) && mouseY<(localYpos+localHeight/2))
         {
+            pushStyle();
+            rectMode(CENTER);
+            fill(80,100);
+            rect(localXpos,localYpos,localWidth,localHeight);
+            popStyle();
             return true;
         }
         else
@@ -829,7 +898,7 @@ class ScoreBoard {
   public void display(){
     pushStyle();
     
-    textFont(font);
+    textFont(sbFont);
     String score = leftScore + "       " +rightScore;
     textAlign(CENTER);
     text(score,width/2,height/8);
