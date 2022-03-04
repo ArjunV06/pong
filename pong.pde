@@ -55,6 +55,8 @@ void draw(){
       text("PRESS TAB TO UNPAUSE",width/2,100);
       text("PRESS CONTROL TO GO TO MAIN MENU",width/2,height/2);
       text("PRESS SHIFT TO RESET GAME",width/2,height-100);
+      textSize(12);
+      
       popStyle();
     break;
     case(0):
@@ -81,7 +83,9 @@ void draw(){
       
       for(int i=0; i<balls.size(); i++)
       {
+        
         Ball quick = balls.get(i);
+        
         quick.display();
         
         
@@ -202,6 +206,7 @@ void draw(){
   
 void keyPressed() 
 { 
+
   println(keyCode);
   switch(screen)
   {
@@ -276,16 +281,35 @@ void keyPressed()
     }
 
   }
+  if(keyCode==32)
+  {
+    balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
+    
+    
+      color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+      Ball quick = balls.get(balls.size()-1);
+      quick.colorSet(quickColor);
+     
+  }
+  if(keyCode==45)
+  {
+    if(balls.size()>1)
+    balls.remove(balls.size()-1);
+  }
+
+  
   
 }
 void resetAll()
 {
   sb.reset();
-  for(int i=balls.size(); i>0; i--)
+  for(int i=balls.size(); i>1; i--)
   {
-    Ball delQuick=balls.get(i);
+    balls.remove(i-1);
+    Ball delQuick=balls.get(0);
     delQuick.reset();
-    balls.remove(i);
+    
+    
   }
   
   right.reset();
