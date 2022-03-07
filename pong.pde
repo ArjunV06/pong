@@ -11,6 +11,8 @@ Button settingsButton;
 Button startButton;
 Button tutorialButton;
 Button pongButton;
+boolean crazyMode;
+boolean deleteCrazy=false;
 PFont font;
 PFont sbFont;
 //boolean quick.goingRight=boolean(int(random(0,1)));
@@ -80,7 +82,57 @@ void draw(){
       right.confine();
       //ball.confine(left, right);
       //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
-      
+      println(balls.size(),frameRate);
+      if(deleteCrazy && frameCount%1==0 && balls.size()>1)
+      {
+        int del=balls.size();
+        int count=1;
+        while(count<5 && balls.size()>1)
+        {
+          balls.remove(del-1);
+          Ball delQuick=balls.get(0);
+          delQuick.reset();
+          del--;
+          count++;
+        }
+        
+        
+        
+        
+    
+    
+        
+      }
+      else
+      {
+        deleteCrazy=false;
+      }
+       
+      if(frameCount%1==0 && crazyMode)
+      {
+        balls.add(new Ball(width/2,height/1,10,3,0.005,0.005,8));
+        color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+        Ball quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/3,10,3,0.005,0.005,8));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/4,10,3,0.005,0.005,8));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/5,10,3,0.005,0.005,8));
+    
+    
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+      }
       for(int i=0; i<balls.size(); i++)
       {
         
@@ -272,17 +324,18 @@ void keyPressed()
   }
   if(keyCode==17)
   {
-    switch(screen)
-    {
-      case 2:
+    
+    
+      
         resetAll();
         screen=0;
-      break;
-    }
+      
+    
 
   }
   if(keyCode==32)
   {
+    deleteCrazy=false;
     balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
     
     
@@ -295,6 +348,17 @@ void keyPressed()
   {
     if(balls.size()>1)
     balls.remove(balls.size()-1);
+    deleteCrazy=false;
+  }
+  if(keyCode==67)
+  {
+    deleteCrazy=false;
+    crazyMode=!crazyMode;
+  }
+  if(keyCode==88)
+  {
+    crazyMode=false;
+    deleteCrazy=true;
   }
 
   
@@ -302,6 +366,8 @@ void keyPressed()
 }
 void resetAll()
 {
+  deleteCrazy=false;
+  crazyMode=false;
   sb.reset();
   for(int i=balls.size(); i>1; i--)
   {
