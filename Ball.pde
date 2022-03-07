@@ -162,6 +162,23 @@ class Ball
         
         yVel=yVelInitial+random(-15,15);
     }
+    /*boolean collisionDetected(Ball ball)
+    {
+        if(((this.xPos+ball.xPos)/2)==this.xPos+this.radius && ((this.yPos+ball.yPos)/2)==this.yPos+this.radius)
+        {
+            if(this.xPos!=ball.xPos && this.yPos!=ball.yPos)
+            {
+                return true;
+            }
+        return false;
+        }
+            
+        else
+        {
+            return false;
+        }
+        
+    }*/
     boolean collisionDetected()
     {
         if(this.yPos-this.radius<=0+2)

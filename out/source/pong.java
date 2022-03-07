@@ -52,7 +52,7 @@ public void setup()
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15f); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15f);
   balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
-  //ball = new Ball(width/2,height/2,10,3,0.005,0.005,8);
+  ball = new Ball(width/2,height/2,10,3,0.005f,0.005f,8);
   textAlign(CENTER, CENTER);
   settingsButton = new Button();
   startButton = new Button();
@@ -124,35 +124,70 @@ public void draw(){
         deleteCrazy=false;
       }
        
-      if(frameCount%1==0 && crazyMode)
+      /*if(frameCount%1==0 && crazyMode)
       {
-        balls.add(new Ball(width/2,height/1,10,3,0.005f,0.005f,8));
-        int quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        balls.add(new Ball(width/2,height/1,10,3,0.005,0.005,int(random(2,18))));
+        color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         Ball quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
-        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,int(random(2,18))));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/3,10,3,0.005f,0.005f,8));
-        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        balls.add(new Ball(width/2,height/3,10,3,0.005,0.005,int(random(2,18))));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/4,10,3,0.005f,0.005f,8));
-        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        balls.add(new Ball(width/2,height/4,10,3,0.005,0.005,int(random(2,18))));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/5,10,3,0.005f,0.005f,8));
+        balls.add(new Ball(width/2,height/5,10,3,0.005,0.005,int(random(2,18))));
     
     
-        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
+      }*/
+      if(frameCount%20==0 && crazyMode)
+      {
+        
+        for(int i=0;i<10;i++)
+        {
+          int inScreen=i*(height/10);
+          if(inScreen<20)
+          {
+            inScreen+=10;
+          }
+          else if(inScreen>height-20)
+          {
+            inScreen-=10;
+          }
+          if(random(1)<0.7f)
+          {
+            balls.add(new Ball(width/2,inScreen,10,random(-3,3),0.005f,0.005f,PApplet.parseInt(random(2,18))));
+            int quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+            Ball quick = balls.get(balls.size()-1);
+            quick.colorSet(quickColor);
+
+          }
+
+          
+        }
       }
       for(int i=0; i<balls.size(); i++)
       {
         
         Ball quick = balls.get(i);
+        /*for(int j=0; j<balls.size(); j++)
+        {
+          Ball quickagain =  balls.get(j);
+          if(quick.collisionDetected(quickagain))
+          {
+            quick.xVel*=-1;
+            quick.yVel*=-1;
+          }
+        }*/
         
         quick.display();
         
@@ -352,7 +387,7 @@ public void keyPressed()
   if(keyCode==32)
   {
     deleteCrazy=false;
-    balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
+    balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,PApplet.parseInt(random(2,18))));
     
     
       int quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
@@ -383,6 +418,7 @@ public void keyPressed()
 public void resetAll()
 {
   deleteCrazy=false;
+  crazyMode=false;
   sb.reset();
   for(int i=balls.size(); i>1; i--)
   {
@@ -589,6 +625,23 @@ class Ball
         
         yVel=yVelInitial+random(-15,15);
     }
+    /*boolean collisionDetected(Ball ball)
+    {
+        if(((this.xPos+ball.xPos)/2)==this.xPos+this.radius && ((this.yPos+ball.yPos)/2)==this.yPos+this.radius)
+        {
+            if(this.xPos!=ball.xPos && this.yPos!=ball.yPos)
+            {
+                return true;
+            }
+        return false;
+        }
+            
+        else
+        {
+            return false;
+        }
+        
+    }*/
     public boolean collisionDetected()
     {
         if(this.yPos-this.radius<=0+2)

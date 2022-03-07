@@ -36,7 +36,7 @@ void setup()
   left = new Paddle(15,120,32,ease,acceleration,150,height/2,0.15); //the third number refers to speed, which is appropximately the max speed that allows you to 
   right = new Paddle(15,120,32,ease,acceleration,width-150,height/2,0.15);
   balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
-  //ball = new Ball(width/2,height/2,10,3,0.005,0.005,8);
+  ball = new Ball(width/2,height/2,10,3,0.005,0.005,8);
   textAlign(CENTER, CENTER);
   settingsButton = new Button();
   startButton = new Button();
@@ -108,35 +108,70 @@ void draw(){
         deleteCrazy=false;
       }
        
-      if(frameCount%1==0 && crazyMode)
+      /*if(frameCount%1==0 && crazyMode)
       {
-        balls.add(new Ball(width/2,height/1,10,3,0.005,0.005,8));
+        balls.add(new Ball(width/2,height/1,10,3,0.005,0.005,int(random(2,18))));
         color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         Ball quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
+        balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,int(random(2,18))));
         quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/3,10,3,0.005,0.005,8));
+        balls.add(new Ball(width/2,height/3,10,3,0.005,0.005,int(random(2,18))));
         quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/4,10,3,0.005,0.005,8));
+        balls.add(new Ball(width/2,height/4,10,3,0.005,0.005,int(random(2,18))));
         quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
-        balls.add(new Ball(width/2,height/5,10,3,0.005,0.005,8));
+        balls.add(new Ball(width/2,height/5,10,3,0.005,0.005,int(random(2,18))));
     
     
         quickColor = color(int(random(255)),int(random(255)),int(random(255)));
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
+      }*/
+      if(frameCount%20==0 && crazyMode)
+      {
+        
+        for(int i=0;i<10;i++)
+        {
+          int inScreen=i*(height/10);
+          if(inScreen<20)
+          {
+            inScreen+=10;
+          }
+          else if(inScreen>height-20)
+          {
+            inScreen-=10;
+          }
+          if(random(1)<0.7)
+          {
+            balls.add(new Ball(width/2,inScreen,10,random(-3,3),0.005,0.005,int(random(2,18))));
+            color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
+            Ball quick = balls.get(balls.size()-1);
+            quick.colorSet(quickColor);
+
+          }
+
+          
+        }
       }
       for(int i=0; i<balls.size(); i++)
       {
         
         Ball quick = balls.get(i);
+        /*for(int j=0; j<balls.size(); j++)
+        {
+          Ball quickagain =  balls.get(j);
+          if(quick.collisionDetected(quickagain))
+          {
+            quick.xVel*=-1;
+            quick.yVel*=-1;
+          }
+        }*/
         
         quick.display();
         
@@ -336,7 +371,7 @@ void keyPressed()
   if(keyCode==32)
   {
     deleteCrazy=false;
-    balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,8));
+    balls.add(new Ball(width/2,height/2,10,3,0.005,0.005,int(random(2,18))));
     
     
       color quickColor = color(int(random(255)),int(random(255)),int(random(255)));
