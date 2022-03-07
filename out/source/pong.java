@@ -27,6 +27,8 @@ Button settingsButton;
 Button startButton;
 Button tutorialButton;
 Button pongButton;
+boolean crazyMode;
+boolean deleteCrazy=false;
 PFont font;
 PFont sbFont;
 //boolean quick.goingRight=boolean(int(random(0,1)));
@@ -71,6 +73,8 @@ public void draw(){
       text("PRESS TAB TO UNPAUSE",width/2,100);
       text("PRESS CONTROL TO GO TO MAIN MENU",width/2,height/2);
       text("PRESS SHIFT TO RESET GAME",width/2,height-100);
+      textSize(12);
+      
       popStyle();
     break;
     case(0):
@@ -94,7 +98,57 @@ public void draw(){
       right.confine();
       //ball.confine(left, right);
       //println(left.speed, abs(left.speed), left.maxSpeed,directionLeft,left.accel);
-      
+      println(balls.size(),frameRate);
+      if(deleteCrazy && frameCount%1==0 && balls.size()>1)
+      {
+        int del=balls.size();
+        int count=1;
+        while(count<5 && balls.size()>1)
+        {
+          balls.remove(del-1);
+          Ball delQuick=balls.get(0);
+          delQuick.reset();
+          del--;
+          count++;
+        }
+        
+        
+        
+        
+    
+    
+        
+      }
+      else
+      {
+        deleteCrazy=false;
+      }
+       
+      if(frameCount%1==0 && crazyMode)
+      {
+        balls.add(new Ball(width/2,height/1,10,3,0.005f,0.005f,8));
+        int quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        Ball quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
+        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/3,10,3,0.005f,0.005f,8));
+        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/4,10,3,0.005f,0.005f,8));
+        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+        balls.add(new Ball(width/2,height/5,10,3,0.005f,0.005f,8));
+    
+    
+        quickColor = color(PApplet.parseInt(random(255)),PApplet.parseInt(random(255)),PApplet.parseInt(random(255)));
+        quick = balls.get(balls.size()-1);
+        quick.colorSet(quickColor);
+      }
       for(int i=0; i<balls.size(); i++)
       {
         
@@ -286,17 +340,18 @@ public void keyPressed()
   }
   if(keyCode==17)
   {
-    switch(screen)
-    {
-      case 2:
+    
+    
+      
         resetAll();
         screen=0;
-      break;
-    }
+      
+    
 
   }
   if(keyCode==32)
   {
+    deleteCrazy=false;
     balls.add(new Ball(width/2,height/2,10,3,0.005f,0.005f,8));
     
     
@@ -309,11 +364,25 @@ public void keyPressed()
   {
     if(balls.size()>1)
     balls.remove(balls.size()-1);
+    deleteCrazy=false;
   }
+  if(keyCode==67)
+  {
+    deleteCrazy=false;
+    crazyMode=!crazyMode;
+  }
+  if(keyCode==88)
+  {
+    crazyMode=false;
+    deleteCrazy=true;
+  }
+
+  
   
 }
 public void resetAll()
 {
+  deleteCrazy=false;
   sb.reset();
   for(int i=balls.size(); i>1; i--)
   {
