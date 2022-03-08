@@ -106,8 +106,8 @@ public void draw(){
         while(count<5 && balls.size()>1)
         {
           balls.remove(del-1);
-          Ball delQuick=balls.get(0);
-          delQuick.reset();
+          //Ball delQuick=balls.get(0);
+          //delQuick.reset();
           del--;
           count++;
         }
@@ -149,7 +149,7 @@ public void draw(){
         quick = balls.get(balls.size()-1);
         quick.colorSet(quickColor);
       }*/
-      if(frameCount%20==0 && crazyMode)
+      if(frameCount%1==0 && crazyMode)
       {
         
         for(int i=0;i<10;i++)
